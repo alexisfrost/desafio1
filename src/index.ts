@@ -4,4 +4,5 @@ const PORT = Number(process.env.PORT) || 3000;
 
 app.listen(PORT, () => {
   console.log(`Server listening on http://localhost:${PORT}`);
+  console.log(`API docs available at http://localhost:${PORT}/docs`);
 });
