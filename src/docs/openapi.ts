@@ -48,6 +48,7 @@ export const openApiSpec = {
       get: {
         tags: ["Score"],
         summary: "Get the score for a rut",
+        description: "Admins can query any rut; users can only query their own.",
         security: [{ bearerAuth: [] }],
         parameters: [
           {
@@ -68,6 +69,7 @@ export const openApiSpec = {
             },
           },
           "401": errorResponse("Missing, invalid or expired token"),
+          "403": errorResponse("User is trying to access another user's rut"),
           "404": errorResponse("No score found for the rut"),
         },
       },
