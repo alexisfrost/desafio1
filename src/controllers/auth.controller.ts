@@ -1,5 +1,7 @@
 import type { Request, Response } from "express";
+import { env } from "../config/env";
 import { users } from "../mocks/users.mock";
+import { signToken } from "../utils/jwt";
 
 export function login(req: Request, res: Response) {
   const { username, password } = req.body ?? {};
@@ -16,9 +18,11 @@ export function login(req: Request, res: Response) {
     return;
   }
 
-  res.json({
+  const token = signToken({
     sub: user.id,
     role: user.role,
     rut: user.role === "user" && user.rut ? user.rut : "none",
   });
+
+  res.json({ token, tokenType: "Bearer", expiresIn: env.jwtExpiresIn });
 }

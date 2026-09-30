@@ -1,8 +1,7 @@
 import { app } from "./app";
+import { env } from "./config/env";
 
-const PORT = Number(process.env.PORT) || 3000;
-
-app.listen(PORT, () => {
-  console.log(`Server listening on http://localhost:${PORT}`);
-  console.log(`API docs available at http://localhost:${PORT}/docs`);
+app.listen(env.port, () => {
+  console.log(`Server listening on http://localhost:${env.port}`);
+  console.log(`API docs available at http://localhost:${env.port}/docs`);
 });

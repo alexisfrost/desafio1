@@ -13,7 +13,8 @@ export const openApiSpec = {
     title: "desafio1 API",
     version: "1.0.0",
     description:
-      "Mock users: admin/admin123 (admin), pablo/pablo123 (user), maria/maria123 (user).",
+      "Mock users: admin/admin123 (admin), pablo/pablo123 (user), maria/maria123 (user). " +
+      "Call POST /login, then click Authorize and paste the returned token.",
   },
   servers: [{ url: "/api" }],
   paths: {
@@ -31,10 +32,10 @@ export const openApiSpec = {
         },
         responses: {
           "200": {
-            description: "Authenticated user payload",
+            description: "Signed JWT whose claims are sub, role and rut",
             content: {
               "application/json": {
-                schema: { $ref: "#/components/schemas/LoginPayload" },
+                schema: { $ref: "#/components/schemas/LoginResponse" },
               },
             },
           },
@@ -47,6 +48,7 @@ export const openApiSpec = {
       get: {
         tags: ["Score"],
         summary: "Get the score for a rut",
+        security: [{ bearerAuth: [] }],
         parameters: [
           {
             name: "rut",
@@ -65,12 +67,16 @@ export const openApiSpec = {
               },
             },
           },
+          "401": errorResponse("Missing, invalid or expired token"),
           "404": errorResponse("No score found for the rut"),
         },
       },
     },
   },
   components: {
+    securitySchemes: {
+      bearerAuth: { type: "http", scheme: "bearer", bearerFormat: "JWT" },
+    },
     schemas: {
       LoginRequest: {
         type: "object",
@@ -80,8 +86,17 @@ export const openApiSpec = {
           password: { type: "string", example: "pablo123" },
         },
       },
-      LoginPayload: {
+      LoginResponse: {
         type: "object",
+        properties: {
+          token: { type: "string", description: "JWT signed with HS256" },
+          tokenType: { type: "string", example: "Bearer" },
+          expiresIn: { type: "string", example: "1h" },
+        },
+      },
+      TokenPayload: {
+        type: "object",
+        description: "Claims inside the JWT (plus iat and exp)",
         properties: {
           sub: { type: "string", description: "User ID", example: "2" },
           role: { type: "string", enum: ["admin", "user"], example: "user" },
