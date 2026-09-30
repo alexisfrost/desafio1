@@ -43,6 +43,32 @@ export const openApiSpec = {
         },
       },
     },
+    "/score/{rut}": {
+      get: {
+        tags: ["Score"],
+        summary: "Get the score for a rut",
+        parameters: [
+          {
+            name: "rut",
+            in: "path",
+            required: true,
+            description: "Rut with or without dots",
+            schema: { type: "string", example: "12.345.678-9" },
+          },
+        ],
+        responses: {
+          "200": {
+            description: "Score for the rut",
+            content: {
+              "application/json": {
+                schema: { $ref: "#/components/schemas/Score" },
+              },
+            },
+          },
+          "404": errorResponse("No score found for the rut"),
+        },
+      },
+    },
   },
   components: {
     schemas: {
@@ -64,6 +90,14 @@ export const openApiSpec = {
             description: 'User rut, or "none" for admins',
             example: "12.345.678-9",
           },
+        },
+      },
+      Score: {
+        type: "object",
+        properties: {
+          rut: { type: "string", example: "12.345.678-9" },
+          score: { type: "number", minimum: 0, maximum: 100, example: 73 },
+          fecha: { type: "string", format: "date-time", example: "2025-06-27T14:35:00Z" },
         },
       },
       Error: {
