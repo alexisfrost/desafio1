@@ -1,10 +1,13 @@
+import cors from "cors";
 import express from "express";
 import swaggerUi from "swagger-ui-express";
+import { corsOptions } from "./config/cors";
 import { openApiSpec } from "./docs/openapi";
 import { router } from "./routes";
 
 export const app = express();
 
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use("/api", router);
 

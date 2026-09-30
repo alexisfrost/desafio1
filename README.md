@@ -34,6 +34,9 @@ Node.js + TypeScript + Express API with mock JWT authentication and a score look
 | `PORT`           | Port the server listens on                            | `3000`  |
 | `JWT_SECRET`     | Secret used to sign and verify JWTs (HS256)           | —       |
 | `JWT_EXPIRES_IN` | Token lifetime, in seconds or as `15m`, `1h`, `7d`    | `1h`    |
+| `CORS_ORIGINS`   | Extra allowed origins, comma-separated (see below)    | —       |
+
+CORS: browser requests from any `localhost`, `127.0.0.1` or `[::1]` origin, on any port, are always allowed. Origins listed in `CORS_ORIGINS` are allowed too, and all others are blocked by the browser.
 
 ## Running
 
